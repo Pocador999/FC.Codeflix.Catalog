@@ -1,4 +1,5 @@
 using System.ComponentModel;
+using Codeflix.Catalog.Domain.Exceptions;
 using DomainEntity = Codeflix.Catalog.Domain.Entity;
 
 namespace Codeflix.Catalog.UnitTests.Domain.Entity.Category;
@@ -58,4 +59,36 @@ public class CategoryTest
         Assert.True(category.CreatedAt < datetimeAfter);
         Assert.Equal(IsActive, category.IsActive);
     }
+
+    [Theory]
+    [InlineData("")]
+    [InlineData(null)]
+    [InlineData("   ")]
+    public void InstantiateErrorWhenNameIsEmpty(string? name)
+    {
+        // Arrange
+        Action action = 
+            () => new DomainEntity.Category(name!, "Category Description");
+        
+        // Act
+        var exception = Assert.Throws<EntityValidationException>(action);
+
+        // Assert
+        Assert.Equal("Name should not be empty or null", exception.Message);
+    }
+
+    [Theory]
+    [InlineData(null)]
+    public void InstantiateErrorWhenDescriptionIsNull(string? description)
+    {
+        // Arrange
+        Action action = 
+            () => new DomainEntity.Category("Category Name", description!);
+        
+        // Act
+        var exception = Assert.Throws<EntityValidationException>(action);
+
+        // Assert
+        Assert.Equal("Description should not be null", exception.Message);
+    } 
 }

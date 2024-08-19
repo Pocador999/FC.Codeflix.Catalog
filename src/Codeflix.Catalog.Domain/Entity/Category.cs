@@ -1,3 +1,5 @@
+using Codeflix.Catalog.Domain.Exceptions;
+
 namespace Codeflix.Catalog.Domain.Entity;
 
 public class Category
@@ -15,5 +17,20 @@ public class Category
         CreatedAt = DateTime.Now;
         IsActive = isActive;
         Id = Guid.NewGuid();
+
+        Validate();
+    }
+
+    public void Validate()
+    {
+        if (string.IsNullOrWhiteSpace(Name))
+        {
+            throw new EntityValidationException($"{nameof(Name)} should not be empty or null");
+        }
+
+        if(Description == null)
+        {
+            throw new EntityValidationException($"{nameof(Description)} should not be null");
+        }
     }
 }
