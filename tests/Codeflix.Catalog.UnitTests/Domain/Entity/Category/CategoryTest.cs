@@ -213,9 +213,56 @@ public class CategoryTest
 
         // Act
         void action() => category.Update(name!);
+        var exception = Assert.Throws<EntityValidationException>(action);
 
         // Assert
-        var exception = Assert.Throws<EntityValidationException>(action);
         Assert.Equal("Name should not be empty or null", exception.Message);
+    }
+
+    [Theory]
+    [InlineData("a")]
+    [InlineData("ab")]
+    [InlineData("12")]
+    public void UpdateErrorWhenNameIsTooShort(string invalidName)
+    {
+        // Arrange
+        var category = new DomainEntity.Category("Category Name", "Category Description");
+
+        // Act
+        void action() => category.Update(invalidName);
+        var exception = Assert.Throws<EntityValidationException>(action);
+
+        // Assert
+        Assert.Equal("Name should have at least 3 characters", exception.Message);
+    }
+
+    [Fact]
+    public void UpdateErrorWhenNameIsTooLong()
+    {
+        // Arrange
+        var category = new DomainEntity.Category("Category Name", "Category Description");
+        var invalidName = String.Join(null, Enumerable.Range(1, 256).Select(_ => "a").ToArray());
+
+        // Act
+        void action() => category.Update(invalidName);
+        var exception = Assert.Throws<EntityValidationException>(action);
+
+        // Assert
+        Assert.Equal("Name should have at most 255 characters", exception.Message);
+    }
+
+    [Fact]
+    public void UpdateErrorWhenDescriptionIsTooLong()
+    {
+        // Arrange
+        var category = new DomainEntity.Category("Category Name", "Category Description");
+        var invalidDescription = String.Join(null, Enumerable.Range(1, 10_001).Select(_ => "a").ToArray());
+
+        // Act
+        void action() => category.Update("Category Name", invalidDescription);
+        var exception = Assert.Throws<EntityValidationException>(action);
+
+        // Assert
+        Assert.Equal("Description should have at most 10.000 characters", exception.Message);
     }
 }
