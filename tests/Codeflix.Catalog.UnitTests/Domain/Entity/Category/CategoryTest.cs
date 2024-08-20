@@ -1,5 +1,6 @@
 using System.ComponentModel;
 using Codeflix.Catalog.Domain.Exceptions;
+using FluentAssertions;
 using DomainEntity = Codeflix.Catalog.Domain.Entity;
 
 namespace Codeflix.Catalog.UnitTests.Domain.Entity.Category;
@@ -22,14 +23,12 @@ public class CategoryTest
         var datetimeAfter = DateTime.Now;
 
         // Assert
-        Assert.NotNull(category);
-        Assert.Equal(validData.Name, category.Name);
-        Assert.Equal(validData.Description, category.Description);
-        Assert.NotEqual(default(Guid), category.Id);
-        Assert.NotEqual(default(DateTime), category.CreatedAt);
-        Assert.True(category.CreatedAt > datetimeBefore);
-        Assert.True(category.CreatedAt < datetimeAfter);
-        Assert.True(category.IsActive);
+        category.Should().NotBeNull();
+        category.Name.Should().Be(validData.Name);
+        category.Description.Should().Be(validData.Description);
+        category.Id.Should().NotBe(default(Guid));
+        category.CreatedAt.Should().BeAfter(datetimeBefore).And.BeBefore(datetimeAfter);
+        category.IsActive.Should().BeTrue();
     }
 
     [Theory(DisplayName = nameof(InstantiateWithIsActive))]
