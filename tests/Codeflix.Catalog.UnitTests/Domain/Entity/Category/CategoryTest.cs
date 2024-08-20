@@ -171,4 +171,19 @@ public class CategoryTest
         // Assert
         Assert.False(category.IsActive);
     }
+
+    [Fact]
+    public void UpdateCategory()
+    {
+        // Arrange
+        var category = new DomainEntity.Category("Category Name", "Category Description");
+        var newValues = new { Name = "New Category Name", Description = "New Category Description" };
+
+        // Act
+        category.Update(newValues.Name, newValues.Description);
+
+        // Assert
+        Assert.Equal(newValues.Name, category.Name);
+        Assert.Equal(newValues.Description, category.Description);
+    }
 }

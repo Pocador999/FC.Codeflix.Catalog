@@ -21,6 +21,25 @@ public class Category
         Validate();
     }
 
+    public void Activate()
+    {
+        IsActive = true;
+        Validate();
+    }
+
+    public void Deactivate()
+    {
+        IsActive = false;
+        Validate();
+    }
+
+    public void Update(string name, string description)
+    {
+        Name = name;
+        Description = description;
+        Validate();
+    }
+
     private void Validate()
     {
         if (string.IsNullOrWhiteSpace(Name))
@@ -37,17 +56,5 @@ public class Category
 
         if (Description.Length > 10_000)
             throw new EntityValidationException($"{nameof(Description)} should have at most 10.000 characters");
-    }
-
-    public void Activate()
-    {
-        IsActive = true;
-        Validate();
-    }
-
-    public void Deactivate()
-    {
-        IsActive = false;
-        Validate();
     }
 }
