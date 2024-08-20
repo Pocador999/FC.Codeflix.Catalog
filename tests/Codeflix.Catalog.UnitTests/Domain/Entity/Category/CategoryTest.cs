@@ -21,10 +21,10 @@ public class CategoryTest
         var validCategory = _categoryTestFixture.GetValidCategory();
 
         // Act
-        var datetimeBefore = DateTime.Now - TimeSpan.FromSeconds(1);
+        var datetimeBefore = DateTime.Now;
 
         var category = new DomainEntity.Category(validCategory.Name, validCategory.Description);
-        var datetimeAfter = DateTime.Now + TimeSpan.FromSeconds(1);
+        var datetimeAfter = DateTime.Now.AddSeconds(1);
 
         // Assert
         category.Should().NotBeNull();
@@ -45,10 +45,10 @@ public class CategoryTest
         var validCategory = _categoryTestFixture.GetValidCategory();
 
         // Act
-        var datetimeBefore = DateTime.Now - TimeSpan.FromSeconds(1);
+        var datetimeBefore = DateTime.Now;
 
         var category = new DomainEntity.Category(validCategory.Name, validCategory.Description, IsActive);
-        var datetimeAfter = DateTime.Now + TimeSpan.FromSeconds(1);
+        var datetimeAfter = DateTime.Now.AddSeconds(1);
 
 
         // Assert
