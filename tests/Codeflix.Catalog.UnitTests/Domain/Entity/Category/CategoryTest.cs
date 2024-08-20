@@ -199,14 +199,15 @@ public class CategoryTest
     {
         // Arrange
         var category = _categoryTestFixture.GetValidCategory();
-        var newValues = new { Name = "New Category Name" };
+        var description = category.Description;
+        var newValues = new { Name = "New Category Name", Description = description };
 
         // Act
         category.Update(newValues.Name);
 
         // Assert
         category.Name.Should().Be(newValues.Name);
-        category.Description.Should().Be("Category Description");
+        category.Description.Should().Be(description);
     }
 
     [Theory]
