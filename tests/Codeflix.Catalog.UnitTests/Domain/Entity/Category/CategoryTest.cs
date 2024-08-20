@@ -153,4 +153,22 @@ public class CategoryTest
         // Assert
         Assert.True(category.IsActive);
     }
+
+    [Fact]
+    public void DeactivateCategory()
+    {
+        // Arrange
+        var validData = new
+        {
+            Name = "Category Name",
+            Description = "Category Description"
+        };
+
+        // Act
+        var category = new DomainEntity.Category(validData.Name, validData.Description, isActive: true);
+        category.Deactivate();
+
+        // Assert
+        Assert.False(category.IsActive);
+    }
 }

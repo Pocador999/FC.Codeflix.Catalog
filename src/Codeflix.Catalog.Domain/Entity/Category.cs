@@ -44,4 +44,10 @@ public class Category
         IsActive = true;
         Validate();
     }
+
+    public void Deactivate()
+    {
+        IsActive = false;
+        Validate();
+    }
 }
