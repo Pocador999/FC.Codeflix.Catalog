@@ -186,4 +186,36 @@ public class CategoryTest
         Assert.Equal(newValues.Name, category.Name);
         Assert.Equal(newValues.Description, category.Description);
     }
+
+    [Fact]
+    public void UpdateOnlyName()
+    {
+        // Arrange
+        var category = new DomainEntity.Category("Category Name", "Category Description");
+        var newValues = new { Name = "New Category Name" };
+
+        // Act
+        category.Update(newValues.Name);
+
+        // Assert
+        Assert.Equal(newValues.Name, category.Name);
+        Assert.Equal("Category Description", category.Description);
+    }
+
+    [Theory]
+    [InlineData("")]
+    [InlineData(null)]
+    [InlineData("   ")]
+    public void UpdateErrorWhenNameIsEmpty(string? name)
+    {
+        // Arrange
+        var category = new DomainEntity.Category("Category Name", "Category Description");
+
+        // Act
+        void action() => category.Update(name!);
+
+        // Assert
+        var exception = Assert.Throws<EntityValidationException>(action);
+        Assert.Equal("Name should not be empty or null", exception.Message);
+    }
 }
