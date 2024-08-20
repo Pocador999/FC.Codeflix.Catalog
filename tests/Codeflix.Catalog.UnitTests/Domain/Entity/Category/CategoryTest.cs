@@ -94,9 +94,7 @@ public class CategoryTest(CategoryTestFixture categoryTestFixture)
     }
 
     [Theory]
-    [InlineData("a")]
-    [InlineData("ab")]
-    [InlineData("12")]
+    [MemberData(nameof(GetInvalidShortName), parameters: 10)]
     public void InstantiateErrorWhenNameIsTooShort(string invalidName)
     {
         // Arrange
@@ -110,6 +108,19 @@ public class CategoryTest(CategoryTestFixture categoryTestFixture)
         action.Should()
             .Throw<EntityValidationException>()
             .WithMessage("Name should have at least 3 characters");
+    }
+
+    public static IEnumerable<object[]> GetInvalidShortName(int numTests = 6)
+    {
+        var fixture = new CategoryTestFixture();
+
+        for(int i = 0; i < numTests; i++)
+        {
+            var isOdd = i % 2 == 1;
+            yield return new object[] { 
+                fixture.GetValidCategoryName()[..(isOdd ? 1 : 2)]
+            };
+        }
     }
 
     [Fact]
