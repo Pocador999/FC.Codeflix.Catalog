@@ -1,8 +1,5 @@
 namespace Codeflix.Catalog.Domain.Exceptions;
 
-public class EntityValidationException : Exception
+public class EntityValidationException(string? message) : Exception(message)
 {
-    public EntityValidationException(string? message) : base(message)
-    {
-    }
 }
