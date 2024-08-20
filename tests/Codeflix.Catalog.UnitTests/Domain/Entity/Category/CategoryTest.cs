@@ -6,13 +6,9 @@ using DomainEntity = Codeflix.Catalog.Domain.Entity;
 namespace Codeflix.Catalog.UnitTests.Domain.Entity.Category;
 
 [Collection(nameof(CategoryTestFixtureCollection))]
-public class CategoryTest
+public class CategoryTest(CategoryTestFixture categoryTestFixture)
 {
-    private readonly CategoryTestFixture _categoryTestFixture;
-    public CategoryTest(CategoryTestFixture categoryTestFixture)
-    {
-        _categoryTestFixture = categoryTestFixture;
-    }
+    private readonly CategoryTestFixture _categoryTestFixture = categoryTestFixture;
 
     [Fact (DisplayName = "InstantiateCategory")]
     public void Instantiate()
