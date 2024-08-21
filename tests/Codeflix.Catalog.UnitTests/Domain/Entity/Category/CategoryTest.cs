@@ -154,7 +154,7 @@ public class CategoryTest(CategoryTestFixture categoryTestFixture)
         // Assert
         action.Should()
             .Throw<EntityValidationException>()
-            .WithMessage("Description should have at most 10.000 characters");
+            .WithMessage("Description should have at most 10000 characters");
     }
 
     [Fact]
@@ -287,6 +287,6 @@ public class CategoryTest(CategoryTestFixture categoryTestFixture)
         // Assert
         action.Should()
             .Throw<EntityValidationException>()
-            .WithMessage("Description should have at most 10.000 characters");
+            .WithMessage("Description should have at most 10000 characters");
     }
 }

@@ -1,5 +1,6 @@
 using Codeflix.Catalog.Domain.Exceptions;
 using Codeflix.Catalog.Domain.SeedWork;
+using Codeflix.Catalog.Domain.Validation;
 
 namespace Codeflix.Catalog.Domain.Entity;
 
@@ -42,19 +43,11 @@ public class Category : AggregateRoot
 
     private void Validate()
     {
-        if (string.IsNullOrWhiteSpace(Name))
-            throw new EntityValidationException($"{nameof(Name)} should not be empty or null");
+        DomainValidation.NotNullOrEmpty(Name, nameof(Name));
+        DomainValidation.MinLenght(Name, nameof(Name), 3);
+        DomainValidation.MaxLenght(Name, nameof(Name), 255);
 
-        if (Description == null)
-            throw new EntityValidationException($"{nameof(Description)} should not be null");
-
-        if (Name.Length < 3)
-            throw new EntityValidationException($"{nameof(Name)} should have at least 3 characters");
-        
-        if (Name.Length > 255)
-            throw new EntityValidationException($"{nameof(Name)} should have at most 255 characters");
-
-        if (Description.Length > 10_000)
-            throw new EntityValidationException($"{nameof(Description)} should have at most 10.000 characters");
+        DomainValidation.NotNull(Description, nameof(Description));
+        DomainValidation.MaxLenght(Description, nameof(Description), 10_000);
     }
 }
