@@ -78,6 +78,41 @@ public class DomainValidationTest
         action.Should().NotThrow();
     }
 
+    [Theory]
+    [MemberData(nameof(GetMaxLengthFailData), parameters: 10)]
+    public void MaxLenghtFail(string target, int maxLenght)
+    {
+        Action action = 
+            () => DomainValidation.MaxLenght(target, nameof(target), maxLenght);
+
+        action.Should().Throw<EntityValidationException>()
+            .WithMessage($"{nameof(target)} should have at most {maxLenght} characters");
+    }    
+
+    [Theory]
+    [MemberData(nameof(GetMaxLenghtOkData), parameters: 10)]
+    public void MaxLenghtOk(string target, int maxLenght)
+    {
+        Action action = 
+            () => DomainValidation.MaxLenght(target, nameof(target), maxLenght);
+
+        action.Should().NotThrow();
+    }
+
+    public static IEnumerable<object[]> GetMinLengthFailData(int numTests = 3)
+    {
+        yield return new object[] { "132456", 10 }; 
+        var faker = new Faker();
+
+        for (int i = 0; i < (numTests - 1); i++)
+        {
+            var example = faker.Commerce.ProductName();
+            var minLength = example.Length + faker.Random.Int(1, 20);
+
+            yield return new object[] { example, minLength };
+        }
+    }
+
     public static IEnumerable<object[]> GetMinLenghtOkData(int numTests = 3)
     {
         yield return new object[] { "132456", 6 }; 
@@ -92,17 +127,31 @@ public class DomainValidationTest
         }
     }
 
-    public static IEnumerable<object[]> GetMinLengthFailData(int numTests = 3)
+    public static IEnumerable<object[]> GetMaxLengthFailData(int numTests = 3)
     {
-        yield return new object[] { "132456", 10 }; 
+        yield return new object[] { "132456", 5 }; 
         var faker = new Faker();
 
         for (int i = 0; i < (numTests - 1); i++)
         {
             var example = faker.Commerce.ProductName();
-            var minLength = example.Length + faker.Random.Int(1, 20);
+            var maxLength = example.Length - faker.Random.Int(1, 5);
 
-            yield return new object[] { example, minLength };
+            yield return new object[] { example, maxLength };
+        }
+    }
+
+    public static IEnumerable<object[]> GetMaxLenghtOkData(int numTests = 3)
+    {
+        yield return new object[] { "132456", 6 }; 
+        var faker = new Faker();
+
+        for (int i = 0; i < (numTests - 1); i++)
+        {
+            var example = faker.Commerce.ProductName();
+            var maxLength = example.Length + faker.Random.Int(0, 5);
+
+            yield return new object[] { example, maxLength };
         }
     }
 }
