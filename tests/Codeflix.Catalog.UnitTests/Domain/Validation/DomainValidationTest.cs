@@ -13,8 +13,10 @@ public class DomainValidationTest
     public void NotNullOk()
     {
         var value = Faker.Commerce.ProductName();
+
         Action action = 
             () => DomainValidation.NotNull(value, nameof(value));
+
         action.Should().NotThrow();
     }
 
@@ -22,10 +24,36 @@ public class DomainValidationTest
     public void NotNullFail()
     {
         string? value = null;
+
         Action action = 
             () => DomainValidation.NotNull(value, nameof(value));
+
         action.Should()
             .Throw<EntityValidationException>()
             .WithMessage($"{nameof(value)} should not be null");
+    }
+
+    [Theory]
+    [InlineData("")]
+    [InlineData("   ")]
+    [InlineData(null)]
+    public void NotNullOrEmptyFailWhenEmpty(string? target)
+    {
+        Action action = 
+            () => DomainValidation.NotNullOrEmpty(target, nameof(target));
+
+        action.Should().Throw<EntityValidationException>()
+            .WithMessage($"{nameof(target)} should not be empty or null");
+    }
+
+    [Fact]
+    public void NotNullOrEmptyOk()
+    {
+        var target = Faker.Commerce.ProductName();
+
+        Action action = 
+            () => DomainValidation.NotNullOrEmpty(target, nameof(target));
+
+        action.Should().NotThrow();
     }
 }
