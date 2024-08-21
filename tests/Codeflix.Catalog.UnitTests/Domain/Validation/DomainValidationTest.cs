@@ -58,7 +58,7 @@ public class DomainValidationTest
     }
 
     [Theory]
-    [MemberData(nameof(GetMinLengthData), parameters: 10)]
+    [MemberData(nameof(GetMinLengthFailData), parameters: 10)]
     public void MinLengthFail(string target, int minLength)
     {
         Action action = 
@@ -68,7 +68,31 @@ public class DomainValidationTest
             .WithMessage($"{nameof(target)} should have at least {minLength} characters");
     }
 
-    public static IEnumerable<object[]> GetMinLengthData(int numTests = 3)
+    [Theory]
+    [MemberData(nameof(GetMinLenghtOkData), parameters: 10)]
+    public void MinLenghtOk(string target, int minLength)
+    {
+        Action action = 
+            () => DomainValidation.MinLenght(target, nameof(target), minLength);
+        
+        action.Should().NotThrow();
+    }
+
+    public static IEnumerable<object[]> GetMinLenghtOkData(int numTests = 3)
+    {
+        yield return new object[] { "132456", 6 }; 
+        var faker = new Faker();
+
+        for (int i = 0; i < (numTests - 1); i++)
+        {
+            var example = faker.Commerce.ProductName();
+            var minLength = example.Length - faker.Random.Int(1, 5);
+
+            yield return new object[] { example, minLength };
+        }
+    }
+
+    public static IEnumerable<object[]> GetMinLengthFailData(int numTests = 3)
     {
         yield return new object[] { "132456", 10 }; 
         var faker = new Faker();
