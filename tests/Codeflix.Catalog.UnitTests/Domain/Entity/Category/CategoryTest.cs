@@ -238,9 +238,7 @@ public class CategoryTest(CategoryTestFixture categoryTestFixture)
     }
 
     [Theory]
-    [InlineData("a")]
-    [InlineData("ab")]
-    [InlineData("12")]
+    [MemberData(nameof(GetInvalidShortName), parameters: 6)]
     public void UpdateErrorWhenNameIsTooShort(string invalidName)
     {
         // Arrange
