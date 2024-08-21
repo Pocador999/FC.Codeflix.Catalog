@@ -15,4 +15,10 @@ public class DomainValidation
         if (string.IsNullOrWhiteSpace(target))
             throw new EntityValidationException($"{fieldName} should not be empty or null");
     }
+
+    public static void MinLenght(string target, string fieldName, int minLenght)
+    {
+        if (target.Length < minLenght)
+            throw new EntityValidationException($"{fieldName} should have at least {minLenght} characters");
+    }
 }

@@ -56,4 +56,29 @@ public class DomainValidationTest
 
         action.Should().NotThrow();
     }
+
+    [Theory]
+    [MemberData(nameof(GetMinLengthData), parameters: 10)]
+    public void MinLengthFail(string target, int minLength)
+    {
+        Action action = 
+            () => DomainValidation.MinLenght(target, nameof(target), minLength);
+    
+        action.Should().Throw<EntityValidationException>()
+            .WithMessage($"{nameof(target)} should have at least {minLength} characters");
+    }
+
+    public static IEnumerable<object[]> GetMinLengthData(int numTests = 3)
+    {
+        yield return new object[] { "132456", 10 }; 
+        var faker = new Faker();
+
+        for (int i = 0; i < (numTests - 1); i++)
+        {
+            var example = faker.Commerce.ProductName();
+            var minLength = example.Length + faker.Random.Int(1, 20);
+
+            yield return new object[] { example, minLength };
+        }
+    }
 }
