@@ -1,0 +1,31 @@
+using Codeflix.Catalog.Domain.Validation;
+using Bogus;
+using FluentAssertions;
+using Codeflix.Catalog.Domain.Exceptions;
+
+namespace Codeflix.Catalog.UnitTests.Domain.Validation;
+
+public class DomainValidationTest
+{
+    private Faker Faker { get; set; } = new Faker();
+    
+    [Fact]
+    public void NotNullOk()
+    {
+        var value = Faker.Commerce.ProductName();
+        Action action = 
+            () => DomainValidation.NotNull(value, nameof(value));
+        action.Should().NotThrow();
+    }
+
+    [Fact]
+    public void NotNullFail()
+    {
+        string? value = null;
+        Action action = 
+            () => DomainValidation.NotNull(value, nameof(value));
+        action.Should()
+            .Throw<EntityValidationException>()
+            .WithMessage($"{nameof(value)} should not be null");
+    }
+}
