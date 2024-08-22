@@ -177,7 +177,6 @@ public class CategoryTest(CategoryTestFixture categoryTestFixture)
         // Arrange
         var validCategory = _categoryTestFixture.GetValidCategory();
 
-
         // Act
         var category = new DomainEntity.Category(validCategory.Name, validCategory.Description, isActive: true);
         category.Deactivate();
@@ -208,7 +207,6 @@ public class CategoryTest(CategoryTestFixture categoryTestFixture)
         var category = _categoryTestFixture.GetValidCategory();
         var newName = _categoryTestFixture.GetValidCategoryName();
         var description = category.Description;
-
 
         // Act
         category.Update(newName);
