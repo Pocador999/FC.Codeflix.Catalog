@@ -6,12 +6,9 @@ using Moq;
 namespace Codeflix.Catalog.UnitTests.Application.CreateCategory;
 
 [Collection(nameof(CreateCategoryTestFixtureCollection))]
-public class CreateCategoryTest
+public class CreateCategoryTest(CreateCategoryTestFixture fixture)
 {
-    private readonly CreateCategoryTestFixture _fixture;
-
-    public CreateCategoryTest(CreateCategoryTestFixture fixture)
-        => _fixture = fixture;
+    private readonly CreateCategoryTestFixture _fixture = fixture;
 
     [Fact]
     public async void CreateCategory()
