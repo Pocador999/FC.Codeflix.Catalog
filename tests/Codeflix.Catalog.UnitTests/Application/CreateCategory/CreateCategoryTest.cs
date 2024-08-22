@@ -1,4 +1,6 @@
 using Codeflix.Catalog.Domain.Entity;
+using Codeflix.Catalog.Domain.Exceptions;
+using Codeflix.Catalog.Application.UseCases.Category.CreateCategory;
 using UseCases = Codeflix.Catalog.Application.UseCases.Category.CreateCategory;
 using FluentAssertions;
 using Moq;
@@ -42,6 +44,49 @@ public class CreateCategoryTest(CreateCategoryTestFixture fixture)
         output.Description.Should().Be(input.Description);
         output.IsActive.Should().Be(input.IsActive);
         output.Id.Should().NotBe(default(Guid));
-        output.CreatedAt.Should().NotBe(default(DateTime));
+        output.CreatedAt.Should().NotBe(default);
+    }
+
+    [Theory]
+    [MemberData(nameof(GetInvalidInput))]
+    public async void CreateCategoryFailAggregate(
+        CreateCategoryInput input,
+        string exceptionMessage
+    )
+    {
+        var repositoryMock = _fixture.GetRepositoryMock();
+        var unitOfWorkMock = _fixture.GetUnitOfWorkMock();
+        var useCase = new UseCases.CreateCategory(
+            repositoryMock.Object,
+            unitOfWorkMock.Object
+        );
+
+        Func<Task> task = async () => await useCase.Handle(input, CancellationToken.None);
+
+        await task.Should().ThrowAsync<EntityValidationException>().WithMessage(exceptionMessage);
+    }
+
+    public static IEnumerable<object[]> GetInvalidInput()
+    {
+        var fixture = new CreateCategoryTestFixture();
+        var invalidInputList = new List<object[]>();
+
+        // Name can't be less than 3 characters
+        var shortName = fixture.GetInput();
+            shortName.Name = shortName.Name[..2];
+        invalidInputList.Add([shortName, "Name should have at least 3 characters"]);
+
+        // Name can't be more than 255 characters
+        var longName = fixture.GetInput();
+        var longNameForCategory = fixture.Faker.Commerce.ProductName();
+
+        while (longNameForCategory.Length <= 255)
+            longNameForCategory = $"{longNameForCategory} {fixture.Faker.Commerce.ProductName()}";
+        longName.Name = longNameForCategory;
+        invalidInputList.Add([longName, "Name should have at most 255 characters"]);
+
+        return invalidInputList;
+
+        // Description can't be null
     }
 }
