@@ -1,4 +1,8 @@
+using Codeflix.Catalog.Application.Interfaces;
+using Codeflix.Catalog.Application.UseCases.Category.CreateCategory;
+using Codeflix.Catalog.Domain.Repository.Interfaces;
 using Codeflix.Catalog.UnitTests.Common;
+using Moq;
 
 namespace Codeflix.Catalog.UnitTests.Application.CreateCategory;
 
@@ -30,4 +34,23 @@ public class CreateCategoryTestFixture : BaseFixture
             
         return categoryDescription;
     }
+
+    public bool GetCategoryBool()
+        => Faker.Random.Bool();
+
+    public CreateCategoryInput GetInput()
+        => new (
+            GetValidCategoryName(),
+            GetValidCategoryDescription(),
+            GetCategoryBool()
+        );
+    public Mock<ICategoryRepository> GetRepositoryMock()
+        => new();
+    public Mock<IUnitOfWork> GetUnitOfWorkMock()
+        => new();
+
+    // public Mock<ICategoryRepository> GetRepositoryMock()
+    //     => new Mock<ICategoryRepository>();
+    // public Mock<IUnitOfWork> GetUnitOfWorkMock()
+    //     => new Mock<IUnitOfWork>();
 }
