@@ -1,4 +1,3 @@
-using System.ComponentModel;
 using Codeflix.Catalog.Domain.Exceptions;
 using FluentAssertions;
 using DomainEntity = Codeflix.Catalog.Domain.Entity;
@@ -27,7 +26,7 @@ public class CategoryTest(CategoryTestFixture categoryTestFixture)
         category.Name.Should().Be(validCategory.Name);
         category.Description.Should().Be(validCategory.Description);
         category.Id.Should().NotBe(default(Guid));
-        category.CreatedAt.Should().NotBe(default(DateTime));
+        category.CreatedAt.Should().NotBe(default);
         category.CreatedAt.Should().BeAfter(datetimeBefore).And.BeBefore(datetimeAfter);
         category.IsActive.Should().BeTrue();
     }
@@ -52,7 +51,7 @@ public class CategoryTest(CategoryTestFixture categoryTestFixture)
         category.Name.Should().Be(validCategory.Name);
         category.Description.Should().Be(validCategory.Description);
         category.Id.Should().NotBe(default(Guid));
-        category.CreatedAt.Should().NotBe(default(DateTime));
+        category.CreatedAt.Should().NotBe(default);
         category.CreatedAt.Should().BeAfter(datetimeBefore).And.BeBefore(datetimeAfter);
         category.IsActive.Should().Be(IsActive);
     }
@@ -128,7 +127,7 @@ public class CategoryTest(CategoryTestFixture categoryTestFixture)
     {
         // Arrange
         var validCategory = _categoryTestFixture.GetValidCategory();
-        var invalidName = String.Join(null, Enumerable.Range(1, 256).Select(_ => "a").ToArray());
+        var invalidName = string.Join(null, Enumerable.Range(1, 256).Select(_ => "a").ToArray());
 
         // Act
         Action action = 
@@ -145,7 +144,7 @@ public class CategoryTest(CategoryTestFixture categoryTestFixture)
     {
         // Arrange
         var validCategory = _categoryTestFixture.GetValidCategory();
-        var invalidDescription = String.Join(null, Enumerable.Range(1, 10_001).Select(_ => "a").ToArray());
+        var invalidDescription = string.Join(null, Enumerable.Range(1, 10_001).Select(_ => "a").ToArray());
 
         // Act
         Action action = 
@@ -286,5 +285,23 @@ public class CategoryTest(CategoryTestFixture categoryTestFixture)
         action.Should()
             .Throw<EntityValidationException>()
             .WithMessage("Description should have at most 10000 characters");
+    }
+
+    [Fact]
+    public void TestInvalidNullDescription()
+    {
+        // Arrange
+        var category = _categoryTestFixture.GetValidCategory();
+
+        // Act
+        Action action = 
+            () => category.Update("Name", null);
+        category.Description = null!;
+
+        // Assert
+        category.Description.Should().Be(null);
+        action.Should()
+            .Throw<EntityValidationException>()
+            .WithMessage("Description should not be null");
     }
 }
