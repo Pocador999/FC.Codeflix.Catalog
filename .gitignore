@@ -72,3 +72,6 @@ project.lock.json
 project.fragment.lock.json
 artifacts/
 project.json.lock
+
+# VS Code Extensions
+.config/

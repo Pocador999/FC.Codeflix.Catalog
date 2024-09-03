@@ -1,4 +1,3 @@
-using Codeflix.Catalog.Domain.Exceptions;
 using Codeflix.Catalog.Domain.SeedWork;
 using Codeflix.Catalog.Domain.Validation;
 
