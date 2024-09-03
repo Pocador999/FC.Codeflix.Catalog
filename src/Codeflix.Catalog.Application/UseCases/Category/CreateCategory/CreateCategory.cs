@@ -1,5 +1,6 @@
 using Codeflix.Catalog.Application.Interfaces;
 using Codeflix.Catalog.Application.UseCases.Category.CreateCategory.Interfaces;
+using Codeflix.Catalog.Domain.Exceptions;
 using Codeflix.Catalog.Domain.Repository.Interfaces;
 using DomainEntity = Codeflix.Catalog.Domain.Entity;
 
@@ -12,6 +13,11 @@ public class CreateCategory(ICategoryRepository categoryRepository, IUnitOfWork 
     private readonly ICategoryRepository _categoryRepository = categoryRepository;
     public async Task<CreateCategoryOutput> Handle(CreateCategoryInput input, CancellationToken cancellationToken)
     {
+        if (input.Description == null)
+        {
+            throw new EntityValidationException("Description should not be null");
+        }
+
         var category = new DomainEntity.Category(
             input.Name, 
             input.Description ?? string.Empty, 
@@ -29,4 +35,5 @@ public class CreateCategory(ICategoryRepository categoryRepository, IUnitOfWork 
             category.IsActive
         );
     }
+
 }

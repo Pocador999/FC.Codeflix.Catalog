@@ -46,7 +46,6 @@ public class Category : AggregateRoot
         DomainValidation.NotNullOrEmpty(Name, nameof(Name));
         DomainValidation.MinLenght(Name, nameof(Name), 3);
         DomainValidation.MaxLenght(Name, nameof(Name), 255);
-
         DomainValidation.NotNull(Description, nameof(Description));
         DomainValidation.MaxLenght(Description, nameof(Description), 10_000);
     }
