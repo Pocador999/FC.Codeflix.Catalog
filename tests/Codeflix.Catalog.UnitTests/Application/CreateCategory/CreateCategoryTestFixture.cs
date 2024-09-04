@@ -4,50 +4,46 @@ using Codeflix.Catalog.Domain.Entity;
 using Codeflix.Catalog.Domain.Repository.Interfaces;
 using Codeflix.Catalog.Domain.SeedWork.Interfaces;
 using Codeflix.Catalog.UnitTests.Common;
-using Category = Codeflix.Catalog.Application.UseCases.Category.CreateCategory;
 using Moq;
+using Category = Codeflix.Catalog.Application.UseCases.Category.CreateCategory;
 
 namespace Codeflix.Catalog.UnitTests.Application.CreateCategory;
 
 [CollectionDefinition(nameof(CreateCategoryTestFixtureCollection))]
-public class CreateCategoryTestFixtureCollection
-    : ICollectionFixture<CreateCategoryTestFixture>
-{
-}
+public class CreateCategoryTestFixtureCollection : ICollectionFixture<CreateCategoryTestFixture> { }
 
 public class CreateCategoryTestFixture : BaseFixture
 {
+    public static Mock<ICategoryRepository> GetRepositoryMock() => new();
+
+    public static Mock<IUnitOfWork> GetUnitOfWorkMock() => new();
+
     public string GetValidCategoryName()
     {
         var categoryName = "";
         while (categoryName.Length < 3)
             categoryName = Faker.Commerce.Categories(1)[0];
 
-        if(categoryName.Length > 255)
+        if (categoryName.Length > 255)
             categoryName = categoryName[..255];
-            
+
         return categoryName;
     }
 
     public string GetValidCategoryDescription()
     {
         var categoryDescription = Faker.Commerce.ProductDescription();
-        if(categoryDescription.Length > 10_000)
+        if (categoryDescription.Length > 10_000)
             categoryDescription = categoryDescription[..10_000];
-            
+
         return categoryDescription;
     }
 
-    public bool GetCategoryBool()
-        => Faker.Random.Bool();
+    public bool GetCategoryBool() => Faker.Random.Bool();
 
-    public CreateCategoryInput GetInput()
-        => new (
-            GetValidCategoryName(),
-            GetValidCategoryDescription(),
-            GetCategoryBool()
-        );
-    
+    public CreateCategoryInput GetInput() =>
+        new(GetValidCategoryName(), GetValidCategoryDescription(), GetCategoryBool());
+
     public CreateCategoryInput GetInvalidShortName()
     {
         var shortName = GetInput();
@@ -77,7 +73,8 @@ public class CreateCategoryTestFixture : BaseFixture
         var longDescription = GetInput();
         var longDescriptionForCategory = Faker.Commerce.ProductDescription();
         while (longDescriptionForCategory.Length <= 10_000)
-            longDescriptionForCategory = $"{longDescriptionForCategory} {Faker.Commerce.ProductDescription()}";
+            longDescriptionForCategory =
+                $"{longDescriptionForCategory} {Faker.Commerce.ProductDescription()}";
         longDescription.Description = longDescriptionForCategory;
         return longDescription;
     }
@@ -86,16 +83,8 @@ public class CreateCategoryTestFixture : BaseFixture
     {
         var repositoryMock = GetRepositoryMock();
         var unitOfWorkMock = GetUnitOfWorkMock();
-        var useCase = new Category.CreateCategory(
-            repositoryMock.Object,
-            unitOfWorkMock.Object
-        );
+        var useCase = new Category.CreateCategory(repositoryMock.Object, unitOfWorkMock.Object);
 
         return (repositoryMock, unitOfWorkMock, useCase);
     }
-
-    public static Mock<ICategoryRepository> GetRepositoryMock()
-        => new();
-    public static Mock<IUnitOfWork> GetUnitOfWorkMock()
-        => new();
 }

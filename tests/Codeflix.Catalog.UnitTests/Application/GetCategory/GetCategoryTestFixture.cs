@@ -10,6 +10,10 @@ public class GetCategoryTestFixtureCollection : ICollectionFixture<GetCategoryTe
 
 public class GetCategoryTestFixture : BaseFixture
 {
+    public Category GetCategory() => new(GetValidCategoryName(), GetValidCategoryDescription());
+
+    public Mock<ICategoryRepository> GetRepositoryMock() => new();
+
     public string GetValidCategoryName()
     {
         var categoryName = "";
@@ -30,8 +34,4 @@ public class GetCategoryTestFixture : BaseFixture
 
         return categoryDescription;
     }
-
-    public Category GetCategory() => new(GetValidCategoryName(), GetValidCategoryDescription());
-
-    public Mock<ICategoryRepository> GetRepositoryMock() => new();
 }

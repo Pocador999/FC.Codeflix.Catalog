@@ -11,6 +11,10 @@ public class DeleteCategoryTestFixtureCollection : ICollectionFixture<DeleteCate
 
 public class DeleteCategoryTestFixture : BaseFixture
 {
+    public Mock<ICategoryRepository> GetRepositoryMock() => new();
+
+    public Mock<IUnitOfWork> GetUnitOfWorkMock() => new();
+
     public string GetValidCategoryName()
     {
         var categoryName = "";
@@ -34,8 +38,4 @@ public class DeleteCategoryTestFixture : BaseFixture
 
     public Category GetValidCategory() =>
         new(GetValidCategoryName(), GetValidCategoryDescription());
-
-    public Mock<ICategoryRepository> GetRepositoryMock() => new();
-
-    public Mock<IUnitOfWork> GetUnitOfWorkMock() => new();
 }
