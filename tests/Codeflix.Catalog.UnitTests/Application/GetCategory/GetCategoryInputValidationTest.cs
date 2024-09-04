@@ -20,4 +20,18 @@ public class GetCategoryInputValidatorTest(GetCategoryTestFixture fixture)
         result.IsValid.Should().BeTrue();
         result.Errors.Should().BeEmpty();
     }
+
+    [Fact]
+    public void Should_ReturnErrorWhenIdIsEmpty()
+    {
+        var input = new GetCategoryInput(Guid.Empty);
+        var validator = new GetCategoryInputValidator();
+
+        var result = validator.Validate(input);
+
+        result.Should().NotBeNull();
+        result.IsValid.Should().BeFalse();
+        result.Errors.Should().NotBeEmpty();
+        result.Errors.Should().ContainSingle(x => x.ErrorMessage == "Id is required");
+    }
 }
