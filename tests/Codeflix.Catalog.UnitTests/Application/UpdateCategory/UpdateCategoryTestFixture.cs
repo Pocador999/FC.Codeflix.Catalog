@@ -54,4 +54,32 @@ public class UpdateCategoryTestFixture : BaseFixture
             GetValidCategoryDescription(),
             GetCategoryBool()
         );
+
+    public UpdateCategoryInput GetInvalidShortName()
+    {
+        var shortName = GetUpdateCategoryInput();
+        shortName.Name = shortName.Name[..2];
+        return shortName;
+    }
+
+    public UpdateCategoryInput GetInvalidLongName()
+    {
+        var longName = GetUpdateCategoryInput();
+        var longNameForCategory = Faker.Commerce.ProductName();
+        while (longNameForCategory.Length <= 255)
+            longNameForCategory = $"{longNameForCategory} {Faker.Commerce.ProductName()}";
+        longName.Name = longNameForCategory;
+        return longName;
+    }
+
+    public UpdateCategoryInput GetInvalidLongDescription()
+    {
+        var longDescription = GetUpdateCategoryInput();
+        var longDescriptionForCategory = Faker.Commerce.ProductDescription();
+        while (longDescriptionForCategory.Length <= 10_000)
+            longDescriptionForCategory =
+                $"{longDescriptionForCategory} {Faker.Commerce.ProductDescription()}";
+        longDescription.Description = longDescriptionForCategory;
+        return longDescription;
+    }
 }
