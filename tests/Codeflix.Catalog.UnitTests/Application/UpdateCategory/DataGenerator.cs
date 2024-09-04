@@ -10,12 +10,7 @@ public class DataGenerator
         for (var i = 0; i < times; i++)
         {
             var category = fixture.GetCategory();
-            var input = new UpdateCategoryInput(
-                category.Id,
-                fixture.GetValidCategoryName(),
-                fixture.GetValidCategoryDescription(),
-                fixture.GetCategoryBool()
-            );
+            var input = fixture.GetUpdateCategoryInput(category.Id);
             yield return new object[] { category, input };
         }
     }
