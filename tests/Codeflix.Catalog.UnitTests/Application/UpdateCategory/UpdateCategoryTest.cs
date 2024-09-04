@@ -19,7 +19,7 @@ public class UpdateCategoryTest(UpdateCategoryTestFixture fixture)
         parameters: 10,
         MemberType = typeof(DataGenerator)
     )]
-    public async Task UpdateCategory_ShouldUpdateCategory(
+    public async Task UpdateCategory_WhenValidInput_ShouldUpdateCategory(
         Category category,
         UseCase.UpdateCategoryInput input
     )
@@ -51,7 +51,7 @@ public class UpdateCategoryTest(UpdateCategoryTestFixture fixture)
         parameters: 3,
         MemberType = typeof(DataGenerator)
     )]
-    public async Task UpdateCategoryWithoutIsActive_ShouldUpdateCategory(
+    public async Task UpdateCategory_WithoutIsActive_ShouldUpdateCategory(
         Category category,
         UseCase.UpdateCategoryInput input
     )
@@ -84,7 +84,7 @@ public class UpdateCategoryTest(UpdateCategoryTestFixture fixture)
         parameters: 3,
         MemberType = typeof(DataGenerator)
     )]
-    public async Task UpdateCategoryWithOnlyName_ShouldUpdateCategory(
+    public async Task UpdateCategory_WithOnlyName_ShouldUpdateCategory(
         Category category,
         UseCase.UpdateCategoryInput input
     )
@@ -112,7 +112,7 @@ public class UpdateCategoryTest(UpdateCategoryTestFixture fixture)
     }
 
     [Fact(DisplayName = "Throw exception when category not found")]
-    public async Task UpdateCategory_ShouldThrowException_WhenNotFound()
+    public async Task UpdateCategory_WhenCategoryNotFound_ShouldThrowException()
     {
         var repositoryMock = _fixture.CategoryRepository;
         var unitOfWorkMock = _fixture.UnitOfWork;
@@ -136,7 +136,7 @@ public class UpdateCategoryTest(UpdateCategoryTestFixture fixture)
         parameters: 12,
         MemberType = typeof(DataGenerator)
     )]
-    public async Task UpdateCategory_ShouldThrowException_WhenInvalidInput(
+    public async Task UpdateCategory_WhenInvalidInput_ShouldThrowException(
         UseCase.UpdateCategoryInput input,
         string errorMessage
     )
