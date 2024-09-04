@@ -50,7 +50,6 @@ public class CreateCategoryTestFixture : BaseFixture
     
     public CreateCategoryInput GetInvalidShortName()
     {
-        // Name should have at least 3 characters
         var shortName = GetInput();
         shortName.Name = shortName.Name[..2];
         return shortName;
@@ -58,7 +57,6 @@ public class CreateCategoryTestFixture : BaseFixture
 
     public CreateCategoryInput GetInvalidLongName()
     {
-        // Name should have at most 255 characters
         var longName = GetInput();
         var longNameForCategory = Faker.Commerce.ProductName();
         while (longNameForCategory.Length <= 255)
@@ -69,7 +67,6 @@ public class CreateCategoryTestFixture : BaseFixture
 
     public CreateCategoryInput GetInvalidNullDescription()
     {
-        // Description should not be null
         var nullDescription = GetInput();
         nullDescription.Description = null!;
         return nullDescription;
@@ -77,7 +74,6 @@ public class CreateCategoryTestFixture : BaseFixture
 
     public CreateCategoryInput GetInvalidLongDescription()
     {
-        // Description should have at most 10_000 characters
         var longDescription = GetInput();
         var longDescriptionForCategory = Faker.Commerce.ProductDescription();
         while (longDescriptionForCategory.Length <= 10_000)
