@@ -11,8 +11,8 @@ public class UpdateCategoryTestFixtureCollection : ICollectionFixture<UpdateCate
 
 public class UpdateCategoryTestFixture : BaseFixture
 {
-    public Mock<ICategoryRepository> CategoryRepository = new();
-    public Mock<IUnitOfWork> UnitOfWork = new();
+    public Mock<ICategoryRepository> CategoryRepository => new();
+    public Mock<IUnitOfWork> UnitOfWork => new();
 
     public Category GetCategory()
     {
