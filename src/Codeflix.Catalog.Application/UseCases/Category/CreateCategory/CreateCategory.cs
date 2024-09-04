@@ -11,7 +11,11 @@ public class CreateCategory(ICategoryRepository categoryRepository, IUnitOfWork 
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
     private readonly ICategoryRepository _categoryRepository = categoryRepository;
-    public async Task<CreateCategoryOutput> Handle(CreateCategoryInput input, CancellationToken cancellationToken)
+
+    public async Task<CreateCategoryOutput> Handle(
+        CreateCategoryInput input,
+        CancellationToken cancellationToken
+    )
     {
         if (input.Description == null)
         {
@@ -19,21 +23,14 @@ public class CreateCategory(ICategoryRepository categoryRepository, IUnitOfWork 
         }
 
         var category = new DomainEntity.Category(
-            input.Name, 
-            input.Description ?? string.Empty, 
+            input.Name,
+            input.Description ?? string.Empty,
             input.IsActive
         );
 
         await _categoryRepository.Insert(category, cancellationToken);
         await _unitOfWork.Commit(cancellationToken);
 
-        return new CreateCategoryOutput(
-            category.Id, 
-            category.Name, 
-            category.Description, 
-            category.CreatedAt,
-            category.IsActive
-        );
+        return CreateCategoryOutput.FromCategory(category);
     }
-
 }
