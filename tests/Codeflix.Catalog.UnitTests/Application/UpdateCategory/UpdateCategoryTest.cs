@@ -1,3 +1,4 @@
+using Codeflix.Catalog.Application.Exceptions;
 using Codeflix.Catalog.Application.Interfaces;
 using Codeflix.Catalog.Application.UseCases.Category.Common;
 using Codeflix.Catalog.Domain.Entity;
@@ -37,14 +38,27 @@ public class UpdateCategoryTest(UpdateCategoryTestFixture fixture)
         output.Description.Should().Be(input.Description);
         output.IsActive.Should().Be(input.IsActive);
 
-        repositoryMock.Verify(
-            x => x.Get(category.Id, It.IsAny<CancellationToken>()),
-            Times.Once
-        );
-        repositoryMock.Verify(
-            x => x.Update(category, It.IsAny<CancellationToken>()),
-            Times.Once
-        );
+        repositoryMock.Verify(x => x.Get(category.Id, It.IsAny<CancellationToken>()), Times.Once);
+        repositoryMock.Verify(x => x.Update(category, It.IsAny<CancellationToken>()), Times.Once);
         unitOfWorkMock.Verify(x => x.Commit(It.IsAny<CancellationToken>()), Times.Once);
+    }
+
+    [Fact(DisplayName = "Throw exception when category not found")]
+    public async Task UpdateCategory_ShouldThrowException_WhenNotFound()
+    {
+        var repositoryMock = _fixture.CategoryRepository;
+        var unitOfWorkMock = _fixture.UnitOfWork;
+        var input = _fixture.GetUpdateCategoryInput();
+        repositoryMock
+            .Setup(x => x.Get(input.Id, It.IsAny<CancellationToken>()))
+            .ThrowsAsync(new NotFoundException($"Category {input.Id} not found"));
+
+        var useCase = new UseCase.UpdateCategory(repositoryMock.Object, unitOfWorkMock.Object);
+
+        var task = async () => await useCase.Handle(input, CancellationToken.None);
+
+        await task.Should().ThrowAsync<NotFoundException>();
+
+        repositoryMock.Verify(x => x.Get(input.Id, It.IsAny<CancellationToken>()), Times.Once);
     }
 }
