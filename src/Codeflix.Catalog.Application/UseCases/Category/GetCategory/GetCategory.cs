@@ -1,11 +1,11 @@
 using Codeflix.Catalog.Application.UseCases.Category.Common;
+using Codeflix.Catalog.Application.UseCases.Category.Interfaces;
 using Codeflix.Catalog.Domain.Repository.Interfaces;
-using MediatR;
 
 namespace Codeflix.Catalog.Application.UseCases.Category.GetCategory;
 
 public class GetCategory(ICategoryRepository categoryRepository) 
-    : IRequestHandler<GetCategoryInput, CategoryModelOutput>
+    : IGetCategory
 {
     private readonly ICategoryRepository _categoryRepository = categoryRepository;
 
