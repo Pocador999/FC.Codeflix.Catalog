@@ -1,4 +1,5 @@
 using Codeflix.Catalog.Application.Interfaces;
+using Codeflix.Catalog.Application.UseCases.Category.Common;
 using Codeflix.Catalog.Domain.Exceptions;
 using Codeflix.Catalog.Domain.Repository.Interfaces;
 using MediatR;
@@ -7,12 +8,12 @@ using DomainEntity = Codeflix.Catalog.Domain.Entity;
 namespace Codeflix.Catalog.Application.UseCases.Category.CreateCategory;
 
 public class CreateCategory(ICategoryRepository categoryRepository, IUnitOfWork unitOfWork)
-    : IRequestHandler<CreateCategoryInput, CreateCategoryOutput>
+    : IRequestHandler<CreateCategoryInput, CategoryModelOutput>
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
     private readonly ICategoryRepository _categoryRepository = categoryRepository;
 
-    public async Task<CreateCategoryOutput> Handle(
+    public async Task<CategoryModelOutput> Handle(
         CreateCategoryInput input,
         CancellationToken cancellationToken
     )
@@ -31,6 +32,6 @@ public class CreateCategory(ICategoryRepository categoryRepository, IUnitOfWork 
         await _categoryRepository.Insert(category, cancellationToken);
         await _unitOfWork.Commit(cancellationToken);
 
-        return CreateCategoryOutput.FromCategory(category);
+        return CategoryModelOutput.FromCategory(category);
     }
 }
