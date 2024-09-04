@@ -1,13 +1,13 @@
 using Codeflix.Catalog.Application.Interfaces;
-using Codeflix.Catalog.Application.UseCases.Category.CreateCategory.Interfaces;
 using Codeflix.Catalog.Domain.Exceptions;
 using Codeflix.Catalog.Domain.Repository.Interfaces;
+using MediatR;
 using DomainEntity = Codeflix.Catalog.Domain.Entity;
 
 namespace Codeflix.Catalog.Application.UseCases.Category.CreateCategory;
 
 public class CreateCategory(ICategoryRepository categoryRepository, IUnitOfWork unitOfWork)
-    : ICreateCategory
+    : IRequestHandler<CreateCategoryInput, CreateCategoryOutput>
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
     private readonly ICategoryRepository _categoryRepository = categoryRepository;
