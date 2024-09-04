@@ -1,4 +1,4 @@
-using Codeflix.Catalog.UnitTests.Application.Exceptions;
+using Codeflix.Catalog.Application.Exceptions;
 using FluentAssertions;
 using Moq;
 using UseCase = Codeflix.Catalog.Application.UseCases.Category.GetCategory;
